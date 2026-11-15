@@ -12,17 +12,8 @@ Then visit http://localhost:8765/
 
 Or double-click `index.html`.
 
-## GitHub Pages
+## Live site
 
-This folder is the site root (includes `.nojekyll`). From this directory:
+https://spkchels.github.io/shreya-oc-math/
 
-```
-git init
-git add .
-git commit -m "OC math practice T1"
-gh auth login
-gh repo create shreya-oc-math --public --source=. --remote=origin --push
-gh repo edit --enable-pages --pages-branch=main
-```
-
-The live URL will be `https://<user>.github.io/shreya-oc-math/`.
+Pages builds from `main` at the repo root. Push to `main` to update the site.
