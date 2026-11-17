@@ -136,6 +136,52 @@ a:focus-visible, button:focus-visible, .opt:focus-visible {
   gap: 10px;
 }
 
+.paper-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+.paper-label select {
+  font: inherit;
+  font-weight: 800;
+  color: var(--navy);
+  background: var(--sheet);
+  border: 1.5px solid var(--navy);
+  border-radius: 2px;
+  padding: 4px 8px;
+}
+
+.paper-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 22px 0;
+}
+.paper-choice {
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--margin);
+  padding: 16px 18px 18px;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.paper-choice h2 {
+  font-size: 1.25rem;
+  margin: 8px 0 8px;
+  max-width: 22ch;
+}
+.paper-choice p { margin: 0 0 8px; color: var(--muted); }
+.paper-choice .actions { margin-top: 12px; }
+.paper-choice .stamp { margin-bottom: 4px; }
+
+#picker h1 {
+  font-size: 2rem;
+  margin: 0 0 10px;
+  max-width: 16ch;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -305,7 +351,7 @@ a:focus-visible, button:focus-visible, .opt:focus-visible {
   margin-top: 12px;
 }
 
-#result[hidden] { display: none !important; }
+#result[hidden], #picker[hidden], #exam[hidden] { display: none !important; }
 .score {
   font-size: 2.6rem;
   font-weight: 800;
@@ -367,7 +413,7 @@ a:focus-visible, button:focus-visible, .opt:focus-visible {
       repeating-linear-gradient(to bottom, transparent 0, transparent 31px, var(--rule) 31px, var(--rule) 32px);
   }
   .topbar, .wrap { padding-left: 32px; }
-  .exam-grid, .topic-list { grid-template-columns: 1fr; }
+  .exam-grid, .topic-list, .paper-choices { grid-template-columns: 1fr; }
   .facts { grid-template-columns: 1fr; gap: 2px; }
   .hero h1 { font-size: 1.7rem; }
 }

@@ -370,3 +370,27 @@ window.OC_QUESTIONS = [
     similar: "Count Step 1 to Step 3, name the rule (sum of squares), then jump. Write the first three terms on the paper so you do not mix this with the odd-square pyramid in Q6."
   }
 ];
+
+window.OC_PAPERS = window.OC_PAPERS || {};
+window.OC_PAPERS.t1 = {
+  id: "t1",
+  stamp: "T1 Mathematical reasoning",
+  title: "Twenty questions from the skills that slipped last time",
+  blurb: "New numbers, same methods as the first set of misses.",
+  minutes: 25,
+  topics: [
+    "Distances on a line",
+    "Rates and the word below",
+    "Decimals from a given product",
+    "Fractions of a remaining amount",
+    "Tiling by unit area",
+    "Growing cube and square patterns",
+    "Two short equations, then test options",
+    "Place value of a repeating digit",
+    "A scale that does not zero",
+    "Probability of A or B",
+    "Compass turns and grid blocks",
+    "Equal objects, rounding a built number"
+  ],
+  questions: window.OC_QUESTIONS
+};

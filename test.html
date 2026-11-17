@@ -3,47 +3,60 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sit the paper | OC Math Practice T1</title>
+  <title>Sit the paper | OC Math Practice</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="index.html">Shreya OC practice</a>
     <div class="meta">
+      <label class="paper-label">Paper
+        <select id="paperSel" aria-label="Choose paper"></select>
+      </label>
       <span id="topic">Mathematical reasoning</span>
       <span class="timer" id="timer" aria-live="polite">25:00</span>
     </div>
   </header>
   <main class="wrap">
-    <div id="result" hidden>
-      <p class="score" id="score">0 / 20</p>
-      <p class="banner" id="banner"></p>
-      <div class="actions" style="margin-bottom:18px;">
-        <a class="btn" href="solutions.html">Open solutions</a>
-        <button class="btn ghost" type="button" id="retry">Sit again</button>
-      </div>
-    </div>
-    <div class="exam-grid">
-      <section class="card">
-        <p class="qnum" id="qnum">Question 1 of 20</p>
-        <div class="stem" id="stem"></div>
-        <div class="options" id="options"></div>
-        <div class="navbtns">
-          <button class="btn ghost" type="button" id="prev">Previous</button>
-          <button class="btn navy" type="button" id="next">Next</button>
-          <button class="btn ghost" type="button" id="flag">Flag for review</button>
-          <button class="btn" type="button" id="submit">Submit paper</button>
+    <section id="picker" hidden>
+      <span class="stamp">Choose a paper</span>
+      <h1>Which test will you sit?</h1>
+      <p>T1 is the first set of misses. T2 is the second set: outcomes, volume, unit price, seating logic, and undoing a wrong method.</p>
+      <div class="paper-choices" id="paper-choices"></div>
+    </section>
+
+    <div id="exam">
+      <div id="result" hidden>
+        <p class="score" id="score">0 / 20</p>
+        <p class="banner" id="banner"></p>
+        <div class="actions" style="margin-bottom:18px;">
+          <a class="btn" id="openSol" href="solutions.html">Open solutions</a>
+          <button class="btn ghost" type="button" id="retry">Sit again</button>
         </div>
-        <p class="note">Keys A to E choose an option. Left and right arrows change question.</p>
-      </section>
-      <aside class="card side">
-        <h2>Question map</h2>
-        <div class="qmap" id="qmap"></div>
-        <p class="note">Blue ring means answered. Gold bar means flagged.</p>
-      </aside>
+      </div>
+      <div class="exam-grid">
+        <section class="card">
+          <p class="qnum" id="qnum">Question 1</p>
+          <div class="stem" id="stem"></div>
+          <div class="options" id="options"></div>
+          <div class="navbtns">
+            <button class="btn ghost" type="button" id="prev">Previous</button>
+            <button class="btn navy" type="button" id="next">Next</button>
+            <button class="btn ghost" type="button" id="flag">Flag for review</button>
+            <button class="btn" type="button" id="submit">Submit paper</button>
+          </div>
+          <p class="note">Keys A to E choose an option. Left and right arrows change question.</p>
+        </section>
+        <aside class="card side">
+          <h2>Question map</h2>
+          <div class="qmap" id="qmap"></div>
+          <p class="note">Blue ring means answered. Gold bar means flagged.</p>
+        </aside>
+      </div>
     </div>
   </main>
   <script src="questions.js"></script>
+  <script src="questions-t2.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

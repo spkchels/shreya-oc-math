@@ -1,8 +1,67 @@
 (function () {
   const KEYS = ["A", "B", "C", "D", "E"];
-  const qs = window.OC_QUESTIONS;
-  const minutes = window.OC_META.minutes;
+  const papers = window.OC_PAPERS || {};
+  const params = new URLSearchParams(location.search);
+  const requested = params.get("paper");
+  const paper = papers[requested];
+
+  const el = (id) => document.getElementById(id);
+  const picker = el("picker");
+  const exam = el("exam");
+
+  function fillPicker() {
+    const box = el("paper-choices");
+    if (!box) return;
+    box.innerHTML = "";
+    Object.keys(papers).sort().forEach((id) => {
+      const p = papers[id];
+      const a = document.createElement("a");
+      a.className = "paper-choice";
+      a.href = "test.html?paper=" + encodeURIComponent(id);
+      a.innerHTML =
+        '<span class="stamp">' + p.stamp + "</span>" +
+        "<h2>" + p.title + "</h2>" +
+        "<p>" + p.blurb + "</p>" +
+        "<p class='note'>" + p.questions.length + " questions, " + p.minutes + " minutes</p>";
+      box.appendChild(a);
+    });
+  }
+
+  if (!paper) {
+    if (exam) exam.hidden = true;
+    if (picker) picker.hidden = false;
+    fillPicker();
+    const t = el("timer");
+    if (t) t.hidden = true;
+    const lab = document.querySelector(".paper-label");
+    if (lab) lab.hidden = true;
+    const topic = el("topic");
+    if (topic) topic.hidden = true;
+    return;
+  }
+
+  if (picker) picker.hidden = true;
+  if (exam) exam.hidden = false;
+
+  const qs = paper.questions;
+  const minutes = paper.minutes;
   const n = qs.length;
+  const storeState = "oc-" + paper.id + "-state";
+  const storeAns = "oc-" + paper.id + "-answers";
+
+  const sel = el("paperSel");
+  if (sel) {
+    Object.keys(papers).sort().forEach((id) => {
+      const o = document.createElement("option");
+      o.value = id;
+      o.textContent = papers[id].stamp.replace(" Mathematical reasoning", "");
+      if (id === paper.id) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener("change", () => {
+      location.href = "test.html?paper=" + encodeURIComponent(sel.value);
+    });
+  }
 
   const state = {
     i: 0,
@@ -13,7 +72,7 @@
     done: false
   };
 
-  const saved = localStorage.getItem("oc-t1-state");
+  const saved = localStorage.getItem(storeState);
   if (saved) {
     try {
       const s = JSON.parse(saved);
@@ -24,10 +83,8 @@
     } catch (e) { /* ignore */ }
   }
 
-  const el = (id) => document.getElementById(id);
-
   function persist() {
-    localStorage.setItem("oc-t1-state", JSON.stringify({
+    localStorage.setItem(storeState, JSON.stringify({
       i: state.i,
       answers: state.answers,
       flags: state.flags,
@@ -49,7 +106,6 @@
       const b = document.createElement("button");
       b.type = "button";
       b.textContent = String(idx + 1);
-      b.className = "";
       if (idx === state.i) b.classList.add("on");
       if (state.answers[idx] !== null) b.classList.add("ans");
       if (state.flags[idx]) b.classList.add("flag");
@@ -89,7 +145,7 @@
     el("flag").textContent = state.flags[state.i] ? "Unflag" : "Flag for review";
     el("prev").disabled = state.i === 0;
     el("next").disabled = state.i === n - 1;
-    el("topic").textContent = state.done ? q.topic : "Mathematical reasoning";
+    el("topic").textContent = state.done ? q.topic : paper.stamp;
     renderMap();
     persist();
     if (state.done) showScore();
@@ -109,6 +165,7 @@
       : pct >= 0.5
         ? "Solid start. Read the foundation box for every miss before you retry."
         : "Treat this as a teaching paper. Go to Solutions and work one topic at a time.";
+    el("openSol").href = "solutions.html?paper=" + encodeURIComponent(paper.id);
     el("submit").hidden = true;
     el("flag").hidden = true;
   }
@@ -126,7 +183,7 @@
   function finish() {
     state.done = true;
     persist();
-    localStorage.setItem("oc-t1-answers", JSON.stringify(state.answers));
+    localStorage.setItem(storeAns, JSON.stringify(state.answers));
     draw();
   }
 
@@ -144,13 +201,13 @@
     if (confirm(msg)) finish();
   });
   el("retry").addEventListener("click", () => {
-    localStorage.removeItem("oc-t1-state");
-    localStorage.removeItem("oc-t1-answers");
+    localStorage.removeItem(storeState);
+    localStorage.removeItem(storeAns);
     location.reload();
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.target.matches("input, textarea")) return;
+    if (e.target.matches("input, textarea, select")) return;
     const k = e.key.toUpperCase();
     const idx = KEYS.indexOf(k);
     if (idx >= 0 && !state.done) {
@@ -163,6 +220,8 @@
     }
   });
 
+  const t0 = el("timer");
+  if (t0) t0.textContent = fmt(minutes * 60);
   draw();
   tick();
   setInterval(tick, 1000);

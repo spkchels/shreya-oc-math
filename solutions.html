@@ -3,28 +3,51 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Solutions | OC Math Practice T1</title>
+  <title>Solutions | OC Math Practice</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="index.html">Shreya OC practice</a>
-    <div class="meta"><a href="test.html">Sit the paper</a></div>
+    <div class="meta">
+      <label class="paper-label">Paper
+        <select id="paperSel" aria-label="Choose paper"></select>
+      </label>
+      <a id="sitLink" href="test.html">Sit the paper</a>
+    </div>
   </header>
   <main class="wrap">
-    <h1>Solutions and how to learn them</h1>
+    <h1 id="solTitle">Solutions and how to learn them</h1>
     <p class="note">Each question has four teaching blocks: the foundation you reuse, the written working, the fast OC method, and the trap. Read the foundation even when you got it right.</p>
     <nav class="menu-sol" id="menu"></nav>
     <div id="list"></div>
-    <p class="footer">If a T1 question felt the same, match it by topic name, not by the story. The story changes. The method does not.</p>
+    <p class="footer">If a missed question felt the same, match it by topic name, not by the story. The story changes. The method does not.</p>
   </main>
   <script src="questions.js"></script>
+  <script src="questions-t2.js"></script>
   <script>
     const KEYS = ["A", "B", "C", "D", "E"];
-    const last = JSON.parse(localStorage.getItem("oc-t1-answers") || "null");
+    const papers = window.OC_PAPERS;
+    const id = new URLSearchParams(location.search).get("paper") || "t1";
+    const paper = papers[id] || papers.t1;
+    document.getElementById("solTitle").textContent = paper.stamp + ": solutions";
+    document.getElementById("sitLink").href = "test.html?paper=" + encodeURIComponent(paper.id);
+    const sel = document.getElementById("paperSel");
+    Object.keys(papers).sort().forEach((pid) => {
+      const o = document.createElement("option");
+      o.value = pid;
+      o.textContent = papers[pid].stamp.replace(" Mathematical reasoning", "");
+      if (pid === paper.id) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener("change", () => {
+      location.href = "solutions.html?paper=" + encodeURIComponent(sel.value);
+    });
+
+    const last = JSON.parse(localStorage.getItem("oc-" + paper.id + "-answers") || "null");
     const menu = document.getElementById("menu");
     const list = document.getElementById("list");
-    window.OC_QUESTIONS.forEach((q) => {
+    paper.questions.forEach((q) => {
       const a = document.createElement("a");
       a.href = "#q" + q.id;
       a.textContent = "Q" + q.id;
@@ -33,13 +56,12 @@
       const sec = document.createElement("article");
       sec.className = "card sol";
       sec.id = "q" + q.id;
-      sec.style.marginBottom = "16px";
       const picked = last ? last[q.id - 1] : null;
       const mark = picked === null || picked === undefined
         ? ""
         : (picked === q.answer
-          ? '<p class="banner ok">Your last attempt: ' + KEYS[picked] + ' (correct)</p>'
-          : '<p class="banner low">Your last attempt: ' + (picked === null ? "blank" : KEYS[picked]) + '. Correct is ' + KEYS[q.answer] + '.</p>');
+          ? '<p class="banner ok">Your last attempt: ' + KEYS[picked] + " (correct)</p>"
+          : '<p class="banner low">Your last attempt: ' + KEYS[picked] + ". Correct is " + KEYS[q.answer] + ".</p>");
       sec.innerHTML =
         "<h2>Q" + q.id + " " + q.topic + "</h2>" +
         mark +
