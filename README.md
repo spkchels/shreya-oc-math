@@ -1,4 +1,4 @@
-# OC Mathematical Reasoning Practice T1
+# OC Mathematical Reasoning Practice (T1, T2, T3)
 
 Static practice paper for Shreya.
 
